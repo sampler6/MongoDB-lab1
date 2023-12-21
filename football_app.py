@@ -24,8 +24,8 @@ class FootballApp:
         self.button_add = tk.Button(text="Добавить", command=self.add)
         self.button_add.place(relx=0.2, rely=0.2, relwidth=0.20)
 
-        self.button_add = tk.Button(text="Сохранить", command=self.save)
-        self.button_add.place(relx=0.4, rely=0.2, relwidth=0.20)
+        self.button_save = tk.Button(text="Сохранить", command=self.save)
+        self.button_save.place(relx=0.4, rely=0.2, relwidth=0.20)
 
         self.button_change = tk.Button(text="Изменить коллекцию", command=self.change)
         self.button_change.place(relx=0.6, rely=0.2, relwidth=0.20)
@@ -57,11 +57,12 @@ class FootballApp:
         self.documents_text.config(state=tk.NORMAL)
         self.documents_text.delete(1.0, tk.END)
         print(self.document)
-        self.documents_text.insert(tk.END, "Текущий документ: " + json.dumps(self.document))
+        self.documents_text.insert(tk.END, "Текущий документ: " + json.dumps(self.document) + "\n")
         for doc in db.get_documents(self.collection):
             self.documents_text.insert(tk.END, json.dumps({x: doc[x] for x in doc if x not in "_id"},
                                        indent=4, ensure_ascii=False) + "\n")
         self.documents_text.config(state=tk.DISABLED)
+
 
 if __name__ == "__main__":
     root = tk.Tk()
