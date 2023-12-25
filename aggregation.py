@@ -4,7 +4,6 @@ import json
 from db import *
 from pymongo.command_cursor import CommandCursor
 
-# ╨Ю╨║╨╛╨╜╨╜╨╛╨╡ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨┤╨╗╤П ╨░╨│╤А╨╡╨│╨░╤Ж╨╕╨╕ ╨┤╨░╨╜╨╜╤Л╤Е
 class AggregationApp:
     def __init__(self, master, f):
         self.master = master
