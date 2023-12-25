@@ -1,12 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 import json
-
-import db
 from db import *
 
 
-class FootballApp:
+class SearchApp:
     def __init__(self, master: tk.Tk, main_font: tuple[str, str, str]):
         self.master = master
         self.master.title("Search App")
@@ -16,7 +14,8 @@ class FootballApp:
         self.key_entry = tk.Entry(master=master)
         self.key_entry.place(relx=0.15, rely=0.15, relwidth=0.20)
 
-        self.operator = ttk.Combobox(master=master, values=['>', '>=', '=', '<=', '<', '!='])
+        self.operator = ttk.Combobox(master=master, values=['>', '>=', '=', '<=', '<', '!='], state='readonly')
+        self.operator.set("=")
         self.operator.place(relx=0.40, rely=0.15, relwidth=0.2)
 
         self.value_label = tk.Label(master=master, text="Значение:", font=main_font)
@@ -27,18 +26,17 @@ class FootballApp:
         self.button_search = tk.Button(text="Искать", command=self.search)
         self.button_search.place(relx=0.4, rely=0.2, relwidth=0.20)
 
-        self.collections_combobox = ttk.Combobox(master=master, values=["games", "teams"])
+        self.collection = ""
+        self.collections_combobox = ttk.Combobox(master=master, values=["games", "teams"], state="readonly")
         self.collections_combobox.place(relx=0.4, rely=0.3, relheight=0.05, relwidth=0.2)
+        self.collections_combobox.bind("<<ComboboxSelected>>", self.change)
         self.collections_combobox.set("teams")
+        self.change(1)
 
         self.documents_text = tk.Text(master, state="disabled")
         self.documents_text.place(relx=0.1, rely=0.4, relwidth=0.8)
 
-        self.collection = ""
-        self.change()
-
     def search(self):
-
         self.documents_text.config(state=tk.NORMAL)
         self.documents_text.delete(1.0, tk.END)
 
@@ -47,15 +45,14 @@ class FootballApp:
                                                           indent=4, ensure_ascii=False) + "\n")
         self.documents_text.config(state=tk.DISABLED)
 
-    def change(self):
+    def change(self, event):
         self.collection = choose_collection(self.collections_combobox.get())
         print(self.collection)
-
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1080x720")
     root['bg'] = 'grey'
-    app = FootballApp(root, ("Courier", "20", tk.NORMAL))
+    app = SearchApp(root, ("Courier", "20", tk.NORMAL))
     root.mainloop()

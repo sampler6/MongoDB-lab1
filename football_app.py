@@ -42,7 +42,8 @@ class FootballApp:
         self.view_current_doc()
 
     def add(self):
-        db.add(self.key_entry.get(), json.dumps(self.value_entry.get()), self.document)
+        db.add(self.key_entry.get(), json.dumps(self.value_entry.get().replace("\n", ""), ensure_ascii=False),
+               self.document)
         self.view_current_doc()
 
     def save(self):
@@ -51,13 +52,15 @@ class FootballApp:
 
     def change(self):
         self.collection = choose_collection(self.collections_combobox.get())
-        print(self.collection)
+        self.view_current_doc()
 
     def view_current_doc(self):
         self.documents_text.config(state=tk.NORMAL)
         self.documents_text.delete(1.0, tk.END)
         print(self.document)
-        self.documents_text.insert(tk.END, "Текущий документ: " + json.dumps(self.document) + "\n")
+        self.documents_text.insert(tk.END, "Текущий документ: " + json.dumps(self.document, indent=4,
+                                                                             ensure_ascii=False)
+                                   + "\n")
         for doc in db.get_documents(self.collection):
             self.documents_text.insert(tk.END, json.dumps({x: doc[x] for x in doc if x not in "_id"},
                                        indent=4, ensure_ascii=False) + "\n")
